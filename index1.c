@@ -9,7 +9,6 @@ typedef struct
 {
     char name[MAX_NAME_LENGTH];
     float price;
-
 } MenuItem;
 
 MenuItem menu[MAX_ITEMS];
@@ -21,10 +20,10 @@ typedef struct
     int quantity;
 } OrderItem;
 
+
 OrderItem orders[MAX_ITEMS];
 int orderCount = 0;
 
-// Add Item to the Menu
 void addItemToMenu(const char *name, float price)
 {
     if (menuCount < MAX_ITEMS)
@@ -32,25 +31,46 @@ void addItemToMenu(const char *name, float price)
         strcpy(menu[menuCount].name, name);
         menu[menuCount].price = price;
         menuCount++;
-        printf("Item added to the menu.\n");
+        printf("Item added to the menu. \n");
     }
     else
     {
-        printf("Menu is full. Cannot add more items.\n");
+        printf("Menu is full. Connot add more items.\n");
     }
 }
 
 // Display Menu
 void displayMenu()
 {
-    printf("\n\n Menu: \n");
+    printf("\n\nMenu: \n");
     for (int i = 0; i < menuCount; i++)
     {
         printf("%d. %s - $%.2f\n", i + 1, menu[i].name, menu[i].price);
     }
 }
 
-// Remove Item from Menu
+// Take Order
+void takeOrder(const char *itemName, int quantity)
+{
+    int found = 0;
+    for (int i = 0; i < menuCount; i++)
+    {
+        if (strcmp(orders[orderCount].name, itemName) == 0)
+        {
+            strcpy(orders[orderCount].name, itemName);
+            orders[orderCount].quantity = quantity;
+            orderCount++;
+            printf("Order taken.\n");
+            found = 1;
+            break;
+        }
+    }
+    if (!found)
+    {
+        printf("Item not found in the menu.\n");
+    }
+}
+// Remove Item From Menu
 void removeItemFromMenu(int index)
 {
     if (index >= 0 && index < menuCount)
@@ -61,34 +81,11 @@ void removeItemFromMenu(int index)
             menu[i].price = menu[i + 1].price;
         }
         menuCount--;
-        printf("Item removed from the Menu.\n");
+        printf("Item removed from the menu. \n");
     }
     else
     {
-        printf("Invalid index. Cannot remove item.\n");
-    }
-}
-
-// Order Items
-void takeOrder(const char *itemName, int quantity)
-{
-    int found = 0;
-
-    for (int i = 0; i < menuCount; i++)
-    {
-        if (strcmp(menu[i].name, itemName) == 0)
-        {
-            strcpy(orders[orderCount].name, itemName);
-            orders[orderCount].quantity = quantity;
-            orderCount++;
-            printf("Order Take.\n");
-            found = 1;
-            break;
-        }
-    }
-    if (!found)
-    {
-        printf("Item not found in the menu.\n");
+        printf("Invalid index. Cannot remove item. \n");
     }
 }
 
@@ -98,19 +95,17 @@ void modifyOrder(int index, int newQuantity)
     if (index >= 0 && index < orderCount)
     {
         orders[index].quantity = newQuantity;
-        printf("Order Modified.\n");
+        printf("Order modified.\n");
     }
     else
     {
-        printf("Invalid index. Cannot modify Order.\n");
+        printf("Invalid index. Cannot Modify Order.\n");
     }
 }
-
 // Total Price
 float calculateTotalPrice()
 {
     float total = 0.0;
-
     for (int i = 0; i < orderCount; i++)
     {
         for (int j = 0; j < menuCount; j++)
@@ -128,12 +123,12 @@ float calculateTotalPrice()
 // Display Orders
 void displayOrders()
 {
-    printf("\n\nOrdre.\n");
+    printf("\n\nOrders: \n");
     for (int i = 0; i < orderCount; i++)
     {
         printf("%d. %s - Quantity: %d\n", i + 1, orders[i].name, orders[i].quantity);
     }
-    printf("Total price: $%.2f\n", calculateTotalPrice());
+    printf("Total Price: $%.2f\n", calculateTotalPrice());
 }
 
 int main()
@@ -147,11 +142,11 @@ int main()
 
     do
     {
-        printf("\nFood Order Management System.\n");
+        printf("\nFood Order Management System\n");
         printf("1. Add Item to Menu\n");
         printf("2. Display Menu\n");
         printf("3. Remove Item from Menu\n");
-        printf("4. Take Order from Menu\n");
+        printf("4. Take Order\n");
         printf("5. Modify Order\n");
         printf("6. Display Orders\n");
         printf("7. Exit\n");
@@ -165,7 +160,6 @@ int main()
             scanf("%s", itemName);
             printf("Enter price of the item: ");
             scanf("%f", &itemPrice);
-
             addItemToMenu(itemName, itemPrice);
             break;
         case 2:
@@ -177,16 +171,16 @@ int main()
             removeItemFromMenu(index - 1);
             break;
         case 4:
-            printf("Enter Name of the item to order: ");
+            printf("Enter name of the item to order: ");
             scanf("%s", itemName);
-            printf("Enter quantity of the item: ");
+            printf("Enter quantity: ");
             scanf("%d", &quantity);
             takeOrder(itemName, quantity);
             break;
         case 5:
-            printf("Enter index of the item to modify: ");
+            printf("Enter index of the order to modify: ");
             scanf("%d", &index);
-            printf("Enter New quantity of the item: ");
+            printf("Enter new quantity: ");
             scanf("%d", &newQuantity);
             modifyOrder(index - 1, newQuantity);
             break;
@@ -199,7 +193,6 @@ int main()
         default:
             printf("Invalid choice. Please try again.\n");
         }
-
     } while (choice != 7);
 
     return 0;
